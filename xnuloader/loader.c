@@ -3872,7 +3872,10 @@ ramfb_phone_screen(void)
 		uint64_t addr;
 		uint32_t fourcc, flags, width, height, stride;
 	} __attribute__((packed)) cfg;
-	static struct {
+	/* QEMU writes the completion word back here. A plain struct lets -O1 keep the
+	 * request word in a register, so the check below fails, the kernel keeps the
+	 * firmware's small mode, and QEMU scans the phone-sized buffer we just cleared. */
+	static volatile struct {
 		uint32_t control, length;
 		uint64_t address;
 	} dma;
